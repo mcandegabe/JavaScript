@@ -76,6 +76,7 @@ function upperCaseImpar() {
     estudiosImpar.forEach(estudioImpar => {
         estudioImpar.nombre = estudioImpar.nombre.toUpperCase();
     });
+    return estudiosImpar;
 }
 
 function cambioNombreId() {
@@ -96,9 +97,9 @@ ordenarSimetria();
 
 const estudiosFiltrados = filtrarSimetriaPar();
 
-upperCaseImpar();
-
 cambioNombreId();
+
+const estudiosImpar = upperCaseImpar();
 
 // Diferentes console.log que muestran los resultados de la utilización de los métodos sort, filter, etc.
 console.log("Estudios con simetría par:");
@@ -114,7 +115,7 @@ for (let i = 0; i < estudios.length; i++) {
 }
 
 console.log("Estudios con nombres en mayúscula y simetría impar:");
-for (let i = 0; i < estudios.length; i++) {
-    const estudio = estudios[i];
+for (let i = 0; i < estudiosImpar.length; i++) {
+    const estudio = estudiosImpar[i];
     console.log(`ID: ${estudio.id}, nombre: ${estudio.nombre}, fecha de nacimiento: ${estudio["fecha de nacimiento"]}, simetría: ${estudio.simetría}`);
 }
