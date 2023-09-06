@@ -1,0 +1,17 @@
+/* Agrega estilos de tarjeta */
+.tarjeta {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+
+/* Estilos adicionales para el contenedor de tarjetas */
+.tarjeta-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+

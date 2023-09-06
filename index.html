@@ -3,10 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./js/main.js"></script>
+    <link rel="stylesheet" href="css/style.css">
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>Agregar Estudio</h1>
+    <label for="sexo">Sexo:</label>
+    <select id="sexo">
+        <option value="hombre">Hombre</option>
+        <option value="mujer">Mujer</option>
+        <option value="no-especificar">No especificar</option>
+    </select>
+    <br>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre">
+    <br>
+    <label for="dia">Día de nacimiento (dd):</label>
+    <select id="dia">
+    </select>
+    <br>
+    <label for="mes">Mes de nacimiento (mm):</label>
+    <select id="mes">
+    </select>
+    <br>    
+    <label for="anio">Año de nacimiento (aaaa):</label>
+    <input type="number" id="anio">
+    <br>
+    <button id="agregar">Realizar el estudio</button>
+
+    <h1>Sus estudios realizados</h1>
+    <div id="contenedor-resultados">
+        <div class="botones">
+            <h2>Ordenar estudios por:</h2>
+            <button id="filtro-id">ID</button>
+            <button id="filtro-nombre">Nombre</button>
+            <button id="filtro-fecha">Fecha de Nacimiento</button>
+            <button id="filtro-simetría">Simetría</button>
+            <button id="filtro-sexo">Sexo</button>
+        </div>
+        <br>
+        <div id="resultados" class="tarjeta-container"></div>
+    </div>
+    <h2 id="mensaje-no-estudios" style="display: none;">Usted todavía no realizó ningún estudio</h2>
+    <p id="mensaje-no-estudios-ayuda" style="display: none;">Complete los datos según le indica el sistema y presione "Realizar el Estudio" para comenzar</p>
+    <script src="./js/main.js"></script>
 </body>
 </html>
