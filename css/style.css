@@ -100,6 +100,9 @@ header img {
 
 #estudios-realizados {
     background-color: #a5dc860f;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 #contenedor-resultados {
@@ -258,4 +261,17 @@ header img {
     padding-right: 10px;
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.sin-estudios {
+    text-align: center;
+    border-color: black;
+    box-shadow: #ec9432 0 0 2px 1px;
+    max-width: 40%;
+    background-color: #ec953215;
+    padding: 15px;
+}
+
+.sin-estudios h3 {
+    color: #1a3d5e;
 }

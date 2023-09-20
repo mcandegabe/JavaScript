@@ -7,24 +7,23 @@ const meses = [
     "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
 ]
 
-const diaSelect = document.getElementById("dia")
-const mesSelect = document.getElementById("mes")
+function cargarSelects(diaSelect, mesSelect) {
+    for (let i = 1; i <= 31; i++) {
+        const option = document.createElement("option")
+        option.value = i
+        option.text = i
+        diaSelect.appendChild(option)
+    }
 
-for (let i = 1; i <= 31; i++) {
-    const option = document.createElement("option")
-    option.value = i
-    option.text = i
-    diaSelect.appendChild(option)
+    for (let i = 1; i <= 12; i++) {
+        const option = document.createElement("option")
+        option.value = i
+        option.text = i
+        mesSelect.appendChild(option)
+    }
 }
 
-for (let i = 1; i <= 12; i++) {
-    const option = document.createElement("option")
-    option.value = i
-    option.text = i
-    mesSelect.appendChild(option)
-}
-
-function filtrarYMostrarEstudios(criterio, estudios) {
+function filtrarYMostrarEstudios(criterio, estudios, contenedorResultados) {
     let estudiosFiltrados = [...estudios]
     switch (criterio) {
         case 'nombre':
@@ -44,7 +43,7 @@ function filtrarYMostrarEstudios(criterio, estudios) {
             break
     }
 
-    mostrarEstudios(estudiosFiltrados)
+    mostrarEstudios(estudiosFiltrados, contenedorResultados)
 }
 
 function ordenarEstudios(estudios, criterio) {
@@ -67,23 +66,25 @@ function parseFecha(fechaStr) {
 }
 
 function obtenerNumeroMes(nombreMes) {
-    const meses = [
-        "enero", "febrero", "marzo", "abril", "mayo", "junio",
-        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-    ]
     return meses.indexOf(nombreMes.toLowerCase())
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("filtro-id").addEventListener("click", () => filtrarYMostrarEstudios('id',estudios))
-    document.getElementById("filtro-nombre").addEventListener("click", () => filtrarYMostrarEstudios('nombre',estudios))
-    document.getElementById("filtro-fecha").addEventListener("click", () => filtrarYMostrarEstudios('fecha',estudios))
-    document.getElementById("filtro-simetría").addEventListener("click", () => filtrarYMostrarEstudios('simetría',estudios))
-    document.getElementById("filtro-sexo").addEventListener("click", () => filtrarYMostrarEstudios('sexo',estudios))
+    const diaSelect = document.getElementById("dia")
+    const mesSelect = document.getElementById("mes")
+    const contenedorResultados = document.getElementById("contenedor-resultados")
 
-    filtrarYMostrarEstudios('id', estudios)
+    cargarSelects(diaSelect, mesSelect)
 
-    cargarEstudiosDesdeAlmacenamiento()
+    document.getElementById("filtro-id").addEventListener("click", () => filtrarYMostrarEstudios('id', estudios, contenedorResultados))
+    document.getElementById("filtro-nombre").addEventListener("click", () => filtrarYMostrarEstudios('nombre', estudios, contenedorResultados))
+    document.getElementById("filtro-fecha").addEventListener("click", () => filtrarYMostrarEstudios('fecha', estudios, contenedorResultados))
+    document.getElementById("filtro-simetría").addEventListener("click", () => filtrarYMostrarEstudios('simetría', estudios, contenedorResultados))
+    document.getElementById("filtro-sexo").addEventListener("click", () => filtrarYMostrarEstudios('sexo', estudios, contenedorResultados))
+
+    filtrarYMostrarEstudios('id', estudios, contenedorResultados)
+
+    cargarEstudiosDesdeAlmacenamiento(estudios)
     cargarEstudiosArchivados('estudios-archivados', estudios)
 })
 
@@ -95,9 +96,9 @@ const anioInput = document.getElementById("anio")
 
 const addButton = document.getElementById("agregar")
 
-addButton.addEventListener("click", () => agregarEstudio(estudios))
+addButton.addEventListener("click", () => agregarEstudio(estudios, nombreInput, diaInput, mesInput, anioInput, sexoInput))
 
-function agregarEstudio(estudios) {
+function agregarEstudio(estudios, nombreInput, diaInput, mesInput, anioInput, sexoInput) {
     const nombre = nombreInput.value
     const dia = parseInt(diaInput.value)
     const mes = parseInt(mesInput.value)
@@ -150,13 +151,14 @@ function agregarEstudio(estudios) {
             }
 
             addButton.removeAttribute("data-id")
-            asignarIdsAEstudios()
+            asignarIdsAEstudios(estudios)
 
-            mostrarEstudios()
+            mostrarEstudios(estudios, contenedorResultados)
 
             if (estudios.length === 1) {
                 document.getElementById("mensaje-no-estudios").style.display = "none"
                 document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+                document.getElementById("contenedor-sin-estudios").style.display = "none"
             }
 
             document.getElementById("contenedor-resultados").style.display = "block"
@@ -168,7 +170,7 @@ function agregarEstudio(estudios) {
             sexoInput.value = ""
 
             guardarEstudiosEnAlmacenamiento(estudios)
-            cargarEstudiosDesdeAlmacenamiento()
+            cargarEstudiosDesdeAlmacenamiento(estudios)
         }
     })
 }
@@ -232,12 +234,12 @@ function mostrarEstudios(estudiosAMostrar = estudios) {
 
         const deleteButton = document.createElement("button")
         deleteButton.textContent = "Eliminar"
-        deleteButton.addEventListener("click", () => eliminarEstudio(estudio))
+        deleteButton.addEventListener("click", () => eliminarEstudio(estudio, estudios))
         deleteButton.classList.add("btn-eliminar")
 
         const modifyButton = document.createElement("button")
         modifyButton.textContent = "Modificar"
-        modifyButton.addEventListener("click", () => modificarEstudio(estudio.id))
+        modifyButton.addEventListener("click", () => modificarEstudio(estudio.id, estudios))
         modifyButton.classList.add("btn-modificar")
 
         buttonsContainer.appendChild(deleteButton)
@@ -250,7 +252,7 @@ function mostrarEstudios(estudiosAMostrar = estudios) {
     })
 }
 
-function eliminarEstudio(estudio) {
+function eliminarEstudio(estudio, estudios) {
     Swal.fire({
         icon: 'question',
         title: '¿Está seguro de que desea eliminar este estudio?',
@@ -262,23 +264,25 @@ function eliminarEstudio(estudio) {
             const index = estudios.findIndex(e => e.id === estudio.id)
             if (index !== -1) {
                 estudios.splice(index, 1)
-                mostrarEstudios(estudios)
+                mostrarEstudios(estudios, contenedorResultados)
                 guardarEstudiosEnAlmacenamiento(estudios)
 
                 if (estudios.length === 1) {
                     document.getElementById("mensaje-no-estudios").style.display = "none"
                     document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+                    document.getElementById("contenedor-sin-estudios").style.display = "none"
                 } else if (estudios.length === 0) {
                     document.getElementById("contenedor-resultados").style.display = "none"
                     document.getElementById("mensaje-no-estudios").style.display = "block"
                     document.getElementById("mensaje-no-estudios-ayuda").style.display = "block"
+                    document.getElementById("contenedor-sin-estudios").style.display = "block"
                 }
             }
         }
     })
 }
 
-function modificarEstudio(id) {
+function modificarEstudio(id, estudios) {
     const index = estudios.findIndex(estudio => estudio.id === id)
     if (index !== -1) {
         const estudio = estudios[index]
@@ -293,7 +297,7 @@ function modificarEstudio(id) {
 
         indiceModificacion = index
 
-        mostrarEstudios(estudios)
+        mostrarEstudios(estudios, contenedorResultados)
     }
 }
 
@@ -302,41 +306,46 @@ function guardarEstudiosEnAlmacenamiento(estudios) {
     localStorage.setItem('estudios', estudiosJson)
 }
 
-function asignarIdsAEstudios() {
+function asignarIdsAEstudios(estudios) {
     estudios.forEach((estudio, index) => {
         estudio.id = index + 1
     })
 }
 
-function cargarEstudiosDesdeAlmacenamiento() {
+function cargarEstudiosDesdeAlmacenamiento(estudios) {
     const estudiosJson = localStorage.getItem('estudios')
     if (estudiosJson) {
         const estudiosCargados = JSON.parse(estudiosJson)
-        estudios = estudiosCargados
-        asignarIdsAEstudios()
-        mostrarEstudios(estudios)
+        estudios.length = 0
+        estudios.push(...estudiosCargados)
+        asignarIdsAEstudios(estudios)
+        mostrarEstudios(estudios, contenedorResultados)
 
         if (estudios.length === 1) {
             document.getElementById("mensaje-no-estudios").style.display = "none"
             document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+            document.getElementById("contenedor-sin-estudios").style.display = "none"
         } else if (estudios.length === 0) {
             document.getElementById("contenedor-resultados").style.display = "none"
             document.getElementById("mensaje-no-estudios").style.display = "block"
             document.getElementById("mensaje-no-estudios-ayuda").style.display = "block"
+            document.getElementById("contenedor-sin-estudios").style.display = "block"
         }
     }
 }
 
-function cargarEstudiosArchivados(estudios) {
+function cargarEstudiosArchivados(contenedor, estudios) {
     const rutaArchivo = '../data/data.json'
     fetch(rutaArchivo)
         .then(response => response.json())
-        .then(data => mostrarEstudiosArchivados(data, estudios))
+        .then(data => mostrarEstudiosArchivados(data, contenedor, estudios))
         .catch(error => console.error('Error al cargar el archivo JSON:', error))
 }
 
-function mostrarEstudiosArchivados(estudios, contenedor) {
+function mostrarEstudiosArchivados(estudios, contenedor, estudiosActuales) {
     const contenedorElement = document.getElementById(contenedor)
+    contenedorElement.innerHTML = ""
+
     estudios.forEach(estudio => {
         const estudioElemento = document.createElement('div')
         estudioElemento.classList.add('tarjeta-archivados', 'estudio-archivado')
@@ -352,7 +361,7 @@ function mostrarEstudiosArchivados(estudios, contenedor) {
 
         const recuperarButton = document.createElement('button')
         recuperarButton.textContent = 'Recuperar Estudio'
-        recuperarButton.addEventListener('click', () => recuperarEstudio(estudio, estudios))
+        recuperarButton.addEventListener('click', () => recuperarEstudio(estudio, estudiosActuales))
 
         estudioElemento.appendChild(nombreElemento)
         estudioElemento.appendChild(fechaElemento)
@@ -363,7 +372,7 @@ function mostrarEstudiosArchivados(estudios, contenedor) {
     })
 }
 
-function recuperarEstudio(estudio) {
+function recuperarEstudio(estudio, estudios) {
     const nombre = estudio.nombre
     const dia = estudio.dia
     const mes = estudio.mes
@@ -400,13 +409,14 @@ function recuperarEstudio(estudio) {
     }).then((result) => {
         if (result.isConfirmed) {
             estudios.push(nuevoEstudio)
-            asignarIdsAEstudios()
-            mostrarEstudios(estudios)
+            asignarIdsAEstudios(estudios)
+            mostrarEstudios(estudios, contenedorResultados)
             guardarEstudiosEnAlmacenamiento(estudios)
 
             if (estudios.length === 1) {
                 document.getElementById("mensaje-no-estudios").style.display = "none"
                 document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+                document.getElementById("contenedor-sin-estudios").style.display = "none"
             }
 
             document.getElementById("contenedor-resultados").style.display = "block"
