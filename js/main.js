@@ -98,6 +98,7 @@ const addButton = document.getElementById("agregar")
 
 addButton.addEventListener("click", () => agregarEstudio(estudios, nombreInput, diaInput, mesInput, anioInput, sexoInput))
 
+
 function agregarEstudio(estudios, nombreInput, diaInput, mesInput, anioInput, sexoInput) {
     const nombre = nombreInput.value
     const dia = parseInt(diaInput.value)
