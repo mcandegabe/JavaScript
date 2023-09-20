@@ -1,0 +1,51 @@
+[
+    {
+        "nombre": "Juan",
+        "dia": 15,
+        "mes": 3,
+        "anio": 1985,
+        "sexo": "hombre"
+    },
+    {
+        "nombre": "Mariana",
+        "dia": 22,
+        "mes": 7,
+        "anio": 1990,
+        "sexo": "mujer"
+    },
+    {
+        "nombre": "Carlos",
+        "dia": 10,
+        "mes": 1,
+        "anio": 1988,
+        "sexo": "hombre"
+    },
+    {
+        "nombre": "Jose",
+        "dia": 23,
+        "mes": 5,
+        "anio": 1978,
+        "sexo": "hombre"
+    },
+    {
+        "nombre": "Luisa",
+        "dia": 16,
+        "mes": 7,
+        "anio": 1953,
+        "sexo": "mujer"
+    },
+    {
+        "nombre": "Enrique",
+        "dia": 27,
+        "mes": 12,
+        "anio": 1950,
+        "sexo": "hombre"
+    },
+    {
+        "nombre": "Sofia",
+        "dia": 10,
+        "mes": 9,
+        "anio": 1999,
+        "sexo": "mujer"
+    }
+]

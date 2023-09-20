@@ -1,4 +1,148 @@
-/* Agrega estilos de tarjeta */
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+h1 {
+    text-align: center;
+    color: #1a3d5e;
+    background: #faebd759;
+    margin: 0px;
+    padding-top: 50px;
+    padding-bottom: 25px;
+}
+
+h2{
+    text-align: center;
+    color: #26584D;
+    margin: 0px;
+    padding-top: 50px;
+    padding-bottom: 25px;
+}
+
+h3 {
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: larger;
+    text-align: center;
+    color: #26584D;
+}
+
+h4 {
+    font-size:medium;
+    color: #1a3d5e;
+}
+
+h5 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    margin-left: 25px;
+    margin-right: 25px;
+    font-size:medium;
+    text-align: left;
+    color: #26584D;
+}
+
+.label {
+    display: flex;
+}
+.label label {
+    margin-right: 10px;
+}
+.label select, input {
+    flex-grow: 1;
+}
+header {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    background: #faebd759;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    box-shadow: #faebd7e3 0px 2px 5px 2px;
+}
+header img {
+    max-height: 300px;
+}
+#formulario {
+    border-radius: 5px;
+    box-shadow: #1a3d5e 0 1px 6px 1px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 25px;
+    padding-right: 25px;
+    max-width: 500px;
+}
+#formulario select, label {
+    border-radius: 5px;
+    font-size: medium;
+    line-height: 1.7;
+    border-color: black;
+    border-width: 2px;
+}
+#formulario input {
+    border-radius: 5px;
+    font-size: medium;
+    border-color: black;
+    border-width: 2px;
+}
+#formulario button {
+    border-radius: 5px;
+    font-size: larger;
+    line-height: 1.7;
+    border-color: #ec9432;
+    background-color: #ec9432;
+    color: #f2f2f2;
+    margin: 10px;
+}
+.button-container {
+    text-align: center;
+}
+
+#estudios-realizados {
+    background-color: #a5dc860f;
+}
+
+#contenedor-resultados {
+    margin-right: 5%;
+    margin-left: 5%;
+    padding-bottom: 15px;
+}
+
+.botones {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.botones button {
+    border-radius: 5px;
+    border-color: #1a3d5e;
+    background-color: #1a3d5e;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.botones button:hover {
+    border-radius: 5px;
+    background-color: #5cad6b;
+    border-color: #5cad6B;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 .tarjeta {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -8,10 +152,110 @@
     background-color: #fff;
 }
 
-/* Estilos adicionales para el contenedor de tarjetas */
 .tarjeta-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
+    font-size: smaller;
 }
 
+.tarjeta-archivados {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+.tarjeta-archivados button {
+    border-color: #26584D;
+    border-radius: 5px;
+    font-size: small;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #26584D;
+    color: #f2f2f2;
+}
+.tarjeta-archivados button:hover {
+    border-color: #1a3d5e;
+    border-radius: 5px;
+    font-size: small;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: #1a3d5e;
+    color: #f2f2f2;
+}
+.tarjeta-container-archivados {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: x-small;
+}
+.simetria-num-estudios {
+    display: none;
+}
+.id-estudios {
+    text-align-last: center;
+}
+.buttons-container {
+    text-align: center;
+}
+.btn-eliminar {
+    border-radius: 5px;
+    border-color: #5cad6B;
+    background-color: #5cad6B;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.btn-eliminar:hover {
+    border-radius: 5px;
+    background-color: #26584D;
+    border-color: #26584D;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.btn-modificar {
+    border-radius: 5px;
+    border-color: #ec9432;
+    background-color: #ec9432;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.btn-modificar:hover {
+    border-radius: 5px;
+    background-color: #26584D;
+    border-color: #26584D;
+    color: #f2f2f2;
+    font-size: medium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

@@ -1,323 +1,415 @@
-let estudios = [];
-let contenedorResultados = document.getElementById("contenedor-resultados");
-let indiceModificacion = -1; // Se agregó una variable global para identificar los estudios que se estén modificando
+let estudios = []
+let contenedorResultados = document.getElementById("contenedor-resultados")
+let indiceModificacion = -1
 
 const meses = [
     "enero", "febrero", "marzo", "abril", "mayo", "junio",
     "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-];
+]
 
-// Aquí se genera una referencia para los datos que se van a cargar en el formulario (Día y Mes) desde un desplegable
-const diaSelect = document.getElementById("dia");
-const mesSelect = document.getElementById("mes");
+const diaSelect = document.getElementById("dia")
+const mesSelect = document.getElementById("mes")
 
-// Genera las opciones para el desplegable de día (del 1 al 31)
 for (let i = 1; i <= 31; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.text = i;
-    diaSelect.appendChild(option);
+    const option = document.createElement("option")
+    option.value = i
+    option.text = i
+    diaSelect.appendChild(option)
 }
 
-// Genera las opciones para el gesplegable de mes (del 1 al 12)
 for (let i = 1; i <= 12; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.text = i;
-    mesSelect.appendChild(option);
+    const option = document.createElement("option")
+    option.value = i
+    option.text = i
+    mesSelect.appendChild(option)
 }
 
-function filtrarYMostrarEstudios(criterio) {
-    let estudiosFiltrados = [...estudios]; // Aquí se crea una copia de los estudios para poder asignar filtros y ordenamientos
-
+function filtrarYMostrarEstudios(criterio, estudios) {
+    let estudiosFiltrados = [...estudios]
     switch (criterio) {
         case 'nombre':
-            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'nombre');
-            break;
+            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'nombre')
+            break
         case 'fecha':
-            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'fecha de nacimiento');
-            break;
+            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'fecha de nacimiento')
+            break
         case 'simetría':
-            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'simetría');
-            break;
+            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'simetría')
+            break
         case 'id':
-            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'id');
-            break;
+            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'id')
+            break
         case 'sexo':
-            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'sexo');
-            break;
+            estudiosFiltrados = ordenarEstudios(estudiosFiltrados, 'sexo')
+            break
     }
 
-    mostrarEstudios(estudiosFiltrados); // Se muestran los estudios dependiendo la selección de filtro que se haya realizado
+    mostrarEstudios(estudiosFiltrados)
 }
 
 function ordenarEstudios(estudios, criterio) {
     return [...estudios].sort((a, b) => {
         if (criterio === 'fecha de nacimiento') {
-            const fechaA = parseFecha(a["fecha de nacimiento"]);
-            const fechaB = parseFecha(b["fecha de nacimiento"]);
-            return fechaA.getTime() - fechaB.getTime();
+            const fechaA = parseFecha(a["fecha de nacimiento"])
+            const fechaB = parseFecha(b["fecha de nacimiento"])
+            return fechaA.getTime() - fechaB.getTime()
         }
-        return a[criterio] < b[criterio] ? -1 : a[criterio] > b[criterio] ? 1 : 0;
-    });
+        return a[criterio] < b[criterio] ? -1 : a[criterio] > b[criterio] ? 1 : 0
+    })
 }
 
-// Función para analizar fechas en formato escrito "6 de junio del año 1978" necesario para el filtro de orden por fecha de nacimiento
 function parseFecha(fechaStr) {
-    const partes = fechaStr.split(' ');
-    const dia = parseInt(partes[0]);
-    const mes = obtenerNumeroMes(partes[2]);
-    const anio = parseInt(partes[5]);
-    return new Date(anio, mes, dia);
+    const partes = fechaStr.split(' ')
+    const dia = parseInt(partes[0])
+    const mes = obtenerNumeroMes(partes[2])
+    const anio = parseInt(partes[5])
+    return new Date(anio, mes, dia)
 }
 
-// Función para obtener el número del mes a partir de su nombre en español necesario para el filtro de orden por fecha de nacimiento
 function obtenerNumeroMes(nombreMes) {
     const meses = [
         "enero", "febrero", "marzo", "abril", "mayo", "junio",
         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-    ];
-    return meses.indexOf(nombreMes.toLowerCase());
+    ]
+    return meses.indexOf(nombreMes.toLowerCase())
 }
 
-// Esta función se ejecutará cuando la página haya cargado completamente.
 document.addEventListener("DOMContentLoaded", function() {
-    // Estos son los eventos click para los filtros
-    document.getElementById("filtro-id").addEventListener("click", () => filtrarYMostrarEstudios('id'));
-    document.getElementById("filtro-nombre").addEventListener("click", () => filtrarYMostrarEstudios('nombre'));
-    document.getElementById("filtro-fecha").addEventListener("click", () => filtrarYMostrarEstudios('fecha'));
-    document.getElementById("filtro-simetría").addEventListener("click", () => filtrarYMostrarEstudios('simetría'));
-    document.getElementById("filtro-sexo").addEventListener("click", () => filtrarYMostrarEstudios('sexo'));
+    document.getElementById("filtro-id").addEventListener("click", () => filtrarYMostrarEstudios('id',estudios))
+    document.getElementById("filtro-nombre").addEventListener("click", () => filtrarYMostrarEstudios('nombre',estudios))
+    document.getElementById("filtro-fecha").addEventListener("click", () => filtrarYMostrarEstudios('fecha',estudios))
+    document.getElementById("filtro-simetría").addEventListener("click", () => filtrarYMostrarEstudios('simetría',estudios))
+    document.getElementById("filtro-sexo").addEventListener("click", () => filtrarYMostrarEstudios('sexo',estudios))
 
-    // Aquí se llama a la función para mostrar los estudios luego de la aplicación de los filtros
-    cargarEstudiosDesdeAlmacenamiento();
-});
+    filtrarYMostrarEstudios('id', estudios)
 
-// En este lugar, obtenemos las referencias de los datos cargados por el usuario en el formulario
-const sexoInput = document.getElementById("sexo");
-const nombreInput = document.getElementById("nombre");
-const diaInput = document.getElementById("dia");
-const mesInput = document.getElementById("mes");
-const anioInput = document.getElementById("anio");
+    cargarEstudiosDesdeAlmacenamiento()
+    cargarEstudiosArchivados('estudios-archivados', estudios)
+})
 
-const addButton = document.getElementById("agregar");
+const sexoInput = document.getElementById("sexo")
+const nombreInput = document.getElementById("nombre")
+const diaInput = document.getElementById("dia")
+const mesInput = document.getElementById("mes")
+const anioInput = document.getElementById("anio")
 
-addButton.addEventListener("click", agregarEstudio);
+const addButton = document.getElementById("agregar")
 
-function agregarEstudio() {
-    const nombre = nombreInput.value;
-    const dia = parseInt(diaInput.value);
-    const mes = parseInt(mesInput.value);
-    const anio = parseInt(anioInput.value);
-    const sexo = sexoInput.value;
+addButton.addEventListener("click", () => agregarEstudio(estudios))
 
-    let resultado = dia + mes + anio;
-    while (resultado > 9) {
-        resultado = sumarDigitos(resultado);
+function agregarEstudio(estudios) {
+    const nombre = nombreInput.value
+    const dia = parseInt(diaInput.value)
+    const mes = parseInt(mesInput.value)
+    const anio = parseInt(anioInput.value)
+    const sexo = sexoInput.value
+
+    if (!nombre || isNaN(dia) || isNaN(mes) || isNaN(anio) || !sexo) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Faltan completar datos',
+            text: 'Por favor chequee que estén todos los datos cargados y vuelva a intentarlo',
+        })
+        return
     }
 
-    const fechaNacimiento = `${dia} de ${meses[mes - 1]} del año ${anio}`;
+    let resultado = dia + mes + anio
+    while (resultado > 9) {
+        resultado = sumarDigitos(resultado)
+    }
+
+    const fechaNacimiento = `${dia} de ${meses[mes - 1]} del año ${anio}`
 
     const estudio = {
         nombre: nombre,
         "fecha de nacimiento": fechaNacimiento,
         simetría: resultado,
         sexo: sexo
-    };
-
-    if (indiceModificacion !== -1) {
-        // Aquí chequeamos si se está modificando un estudio ya realizado.
-        estudios[indiceModificacion] = estudio;
-        indiceModificacion = -1; // En este espacio reestablecemos el índice si así fuera
-    } else {
-        // Si no se cumple lo anterior, creamos un nuevo estudio
-        estudios.push(estudio);
     }
 
-    // Restablecer el atributo data-id
-    addButton.removeAttribute("data-id");
+    Swal.fire({
+        icon: 'info',
+        title: 'Por favor, confirme los datos del estudio',
+        html: `
+            <div>
+                <p>Nombre: ${nombre}</p>
+                <p>Fecha de Nacimiento: ${fechaNacimiento}</p>
+                <p>Sexo: ${sexo}</p>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Realizar estudio',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (indiceModificacion !== -1) {
+                estudios[indiceModificacion] = estudio
+                indiceModificacion = -1
+            } else {
+                estudios.push(estudio)
+            }
 
-    // Llama a la función para asignar IDs
-    asignarIdsAEstudios();
+            addButton.removeAttribute("data-id")
+            asignarIdsAEstudios()
 
-    // Mostrar los estudios después de guardarlos
-    mostrarEstudios();
+            mostrarEstudios()
 
-    // Aquí comprobamos si hay o no un estudio ya realizado
-    if (estudios.length === 1) {
-        // Se oculta el mensaje de "Usted todavía no realizó ningún estudio" si hay estudios
-        document.getElementById("mensaje-no-estudios").style.display = "none";
-        document.getElementById("mensaje-no-estudios-ayuda").style.display = "none";
-    }
+            if (estudios.length === 1) {
+                document.getElementById("mensaje-no-estudios").style.display = "none"
+                document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+            }
 
-    // Mostrar siempre la sección de "Sus estudios realizados"
-    document.getElementById("contenedor-resultados").style.display = "block";
+            document.getElementById("contenedor-resultados").style.display = "block"
 
-    // Se limpia el formulario después de agregar o modificar un estudio para que no queden cargados los datos
-    nombreInput.value = "";
-    diaInput.value = "";
-    mesInput.value = "";
-    anioInput.value = "";
-    sexoInput.value = "";
+            nombreInput.value = ""
+            diaInput.value = ""
+            mesInput.value = ""
+            anioInput.value = ""
+            sexoInput.value = ""
 
-    // Guardar los estudios en el local storage
-    guardarEstudiosEnAlmacenamiento();
+            guardarEstudiosEnAlmacenamiento(estudios)
+            cargarEstudiosDesdeAlmacenamiento()
+        }
+    })
 }
 
 function sumarDigitos(numero) {
-    let suma = 0;
+    let suma = 0
     while (numero) {
-        suma += numero % 10;
-        numero = Math.floor(numero / 10);
+        suma += numero % 10
+        numero = Math.floor(numero / 10)
     }
-    return suma;
+    return suma
 }
 
 function mostrarEstudios(estudiosAMostrar = estudios) {
-    const container = document.getElementById("resultados");
-    container.innerHTML = '';
+    const container = document.getElementById("resultados")
+    container.innerHTML = ""
 
     estudiosAMostrar.forEach((estudio, indice) => {
-        const div = document.createElement('div');
-        div.classList.add('tarjeta');
+        const div = document.createElement("div")
+        div.classList.add("tarjeta")
 
-        // Obtener el ID del estudio (índice original del local storage + 1)
-        const id = estudio.id;
+        const id = estudio.id
 
-        // Crear botones para eliminar y modificar cada estudio
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => eliminarEstudio(estudio)); // Pasa el objeto del estudio
+        const infoContainer = document.createElement("div")
+        infoContainer.classList.add("info-container")
 
-        const modifyButton = document.createElement('button');
-        modifyButton.textContent = 'Modificar';
-        modifyButton.addEventListener('click', () => modificarEstudio(estudio.id)); // Pasa el id del estudio
+        const idParagraph = document.createElement("p")
+        idParagraph.textContent = `Número de Estudio: ${id}`
+        idParagraph.classList.add("id-estudios")
 
-        // Crear párrafos para mostrar el ID y otros detalles del estudio de forma más ordenada
-        const idParagraph = document.createElement('p');
-        idParagraph.textContent = `ID: ${id}`;
+        const simetriaParagraph = document.createElement("p")
+        simetriaParagraph.textContent = `Simetría: ${estudio.simetría}`
+        simetriaParagraph.classList.add("simetria-num-estudios")
 
-        const nombreParagraph = document.createElement('p');
-        nombreParagraph.textContent = `Nombre: ${estudio.nombre}, Sexo: ${estudio.sexo}`;
+        const simetriaImagen = document.createElement('img')
+        simetriaImagen.src = `./img/Simetria${estudio.simetría}.png`
+        simetriaImagen.alt = `Simetría ${estudio.simetría}`
+        simetriaImagen.classList.add('imagen-simetria')
 
-        const fechaParagraph = document.createElement('p');
-        fechaParagraph.textContent = `Fecha de Nacimiento: ${estudio["fecha de nacimiento"]}`;
+        const nombreParagraph = document.createElement("p")
+        nombreParagraph.innerHTML = `<strong>Nombre:</strong> ${estudio.nombre}`
+        nombreParagraph.classList.add("nombre-estudios")
 
-        const simetriaParagraph = document.createElement('p');
-        simetriaParagraph.textContent = `Simetría: ${estudio.simetría}`;
+        const fechaParagraph = document.createElement("p")
+        fechaParagraph.innerHTML = `<strong>Fecha de Nacimiento:</strong> </br>${estudio["fecha de nacimiento"]}`
+        fechaParagraph.classList.add("fecha-estudios")
 
-        // Agregar párrafos y botones al div
-        div.appendChild(idParagraph);
-        div.appendChild(nombreParagraph);
-        div.appendChild(fechaParagraph);
-        div.appendChild(simetriaParagraph);
-        div.appendChild(deleteButton);
-        div.appendChild(modifyButton);
+        const sexoParagraph = document.createElement("p")
+        sexoParagraph.innerHTML = `<strong>Sexo:</strong> ${estudio.sexo}`
+        sexoParagraph.classList.add("sexo-estudios")
 
-        container.appendChild(div);
-    });
+        infoContainer.appendChild(idParagraph)
+        infoContainer.appendChild(simetriaImagen)
+        infoContainer.appendChild(simetriaParagraph)
+        infoContainer.appendChild(nombreParagraph)
+        infoContainer.appendChild(fechaParagraph)
+        infoContainer.appendChild(sexoParagraph)
+
+        const buttonsContainer = document.createElement("div")
+        buttonsContainer.classList.add("buttons-container")
+
+        const deleteButton = document.createElement("button")
+        deleteButton.textContent = "Eliminar"
+        deleteButton.addEventListener("click", () => eliminarEstudio(estudio))
+        deleteButton.classList.add("btn-eliminar")
+
+        const modifyButton = document.createElement("button")
+        modifyButton.textContent = "Modificar"
+        modifyButton.addEventListener("click", () => modificarEstudio(estudio.id))
+        modifyButton.classList.add("btn-modificar")
+
+        buttonsContainer.appendChild(deleteButton)
+        buttonsContainer.appendChild(modifyButton)
+
+        div.appendChild(infoContainer)
+        div.appendChild(buttonsContainer)
+
+        container.appendChild(div)
+    })
 }
 
 function eliminarEstudio(estudio) {
-    const index = estudios.findIndex(e => e.id === estudio.id);
+    Swal.fire({
+        icon: 'question',
+        title: '¿Está seguro de que desea eliminar este estudio?',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const index = estudios.findIndex(e => e.id === estudio.id)
+            if (index !== -1) {
+                estudios.splice(index, 1)
+                mostrarEstudios(estudios)
+                guardarEstudiosEnAlmacenamiento(estudios)
+
+                if (estudios.length === 1) {
+                    document.getElementById("mensaje-no-estudios").style.display = "none"
+                    document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+                } else if (estudios.length === 0) {
+                    document.getElementById("contenedor-resultados").style.display = "none"
+                    document.getElementById("mensaje-no-estudios").style.display = "block"
+                    document.getElementById("mensaje-no-estudios-ayuda").style.display = "block"
+                }
+            }
+        }
+    })
+}
+
+function modificarEstudio(id) {
+    const index = estudios.findIndex(estudio => estudio.id === id)
     if (index !== -1) {
-        estudios.splice(index, 1); // Eliminar el estudio
-        mostrarEstudios(); // Actualizar la vista
-        guardarEstudiosEnAlmacenamiento(); // Guarda los estudios después de eliminar uno
+        const estudio = estudios[index]
+        nombreInput.value = estudio.nombre
 
-        // Comprobación si es el primer estudio
+        const fechaNacimientoParts = estudio["fecha de nacimiento"].split(" ")
+        diaInput.value = parseInt(fechaNacimientoParts[0])
+        mesInput.value = meses.indexOf(fechaNacimientoParts[2]) + 1
+        anioInput.value = parseInt(fechaNacimientoParts[5])
+
+        sexoInput.value = estudio.sexo
+
+        indiceModificacion = index
+
+        mostrarEstudios(estudios)
+    }
+}
+
+function guardarEstudiosEnAlmacenamiento(estudios) {
+    const estudiosJson = JSON.stringify(estudios)
+    localStorage.setItem('estudios', estudiosJson)
+}
+
+function asignarIdsAEstudios() {
+    estudios.forEach((estudio, index) => {
+        estudio.id = index + 1
+    })
+}
+
+function cargarEstudiosDesdeAlmacenamiento() {
+    const estudiosJson = localStorage.getItem('estudios')
+    if (estudiosJson) {
+        const estudiosCargados = JSON.parse(estudiosJson)
+        estudios = estudiosCargados
+        asignarIdsAEstudios()
+        mostrarEstudios(estudios)
+
         if (estudios.length === 1) {
-            // Ocultar el mensaje de "Usted todavía no realizó ningún estudio"
-            document.getElementById("mensaje-no-estudios").style.display = "none";
-            document.getElementById("mensaje-no-estudios-ayuda").style.display = "none";
-
-            // Mostrar la sección de "Sus estudios realizados"
-            document.getElementById("contenedor-resultados").style.display = "block";
+            document.getElementById("mensaje-no-estudios").style.display = "none"
+            document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
         } else if (estudios.length === 0) {
-            // No se encontraron estudios, ocultar la sección de "Sus estudios realizados"
-            document.getElementById("contenedor-resultados").style.display = "none";
-
-            // Mostrar el mensaje de "Usted todavía no realizó ningún estudio"
-            document.getElementById("mensaje-no-estudios").style.display = "block";
-            document.getElementById("mensaje-no-estudios-ayuda").style.display = "block";
+            document.getElementById("contenedor-resultados").style.display = "none"
+            document.getElementById("mensaje-no-estudios").style.display = "block"
+            document.getElementById("mensaje-no-estudios-ayuda").style.display = "block"
         }
     }
 }
 
-// Función para modificar datos de un estudio
-function modificarEstudio(id) {
-    const index = estudios.findIndex(estudio => estudio.id === id);
-    if (index !== -1) {
-        // Obtener el estudio que queremos modificar
-        const estudio = estudios[index];
+function cargarEstudiosArchivados(estudios) {
+    const rutaArchivo = '../data/data.json'
+    fetch(rutaArchivo)
+        .then(response => response.json())
+        .then(data => mostrarEstudiosArchivados(data, estudios))
+        .catch(error => console.error('Error al cargar el archivo JSON:', error))
+}
 
-        // Llena el formulario con todos los datos del estudio
-        nombreInput.value = estudio.nombre;
-        
-        // Divide la fecha de nacimiento en partes para poderla cargar en el form inicial
-        const fechaNacimientoParts = estudio["fecha de nacimiento"].split(" ");
-        
-        // Asigna los valores a los campos del form
-        diaInput.value = parseInt(fechaNacimientoParts[0]);
-        mesInput.value = meses.indexOf(fechaNacimientoParts[2]) + 1;
-        anioInput.value = parseInt(fechaNacimientoParts[5]);
+function mostrarEstudiosArchivados(estudios, contenedor) {
+    const contenedorElement = document.getElementById(contenedor)
+    estudios.forEach(estudio => {
+        const estudioElemento = document.createElement('div')
+        estudioElemento.classList.add('tarjeta-archivados', 'estudio-archivado')
 
-        sexoInput.value = estudio.sexo;
+        const nombreElemento = document.createElement('p')
+        nombreElemento.textContent = `Nombre: ${estudio.nombre}`
 
-        // Establece el índice de modificación
-        indiceModificacion = index;
+        const fechaElemento = document.createElement('p')
+        fechaElemento.textContent = `Fecha de Nacimiento: ${estudio.dia} de ${meses[estudio.mes - 1]} del año ${estudio.anio}`
 
-        // Actualizar la vista
-        mostrarEstudios();
+        const sexoElemento = document.createElement('p')
+        sexoElemento.textContent = `Sexo: ${estudio.sexo}`
+
+        const recuperarButton = document.createElement('button')
+        recuperarButton.textContent = 'Recuperar Estudio'
+        recuperarButton.addEventListener('click', () => recuperarEstudio(estudio, estudios))
+
+        estudioElemento.appendChild(nombreElemento)
+        estudioElemento.appendChild(fechaElemento)
+        estudioElemento.appendChild(sexoElemento)
+        estudioElemento.appendChild(recuperarButton)
+
+        contenedorElement.appendChild(estudioElemento)
+    })
+}
+
+function recuperarEstudio(estudio) {
+    const nombre = estudio.nombre
+    const dia = estudio.dia
+    const mes = estudio.mes
+    const anio = estudio.anio
+    const sexo = estudio.sexo
+
+    let resultado = dia + mes + anio
+    while (resultado > 9) {
+        resultado = sumarDigitos(resultado)
     }
-}
 
-// Función para guardar los estudios en el almacenamiento en localStorage
-function guardarEstudiosEnAlmacenamiento() {
-    // Convierte la información del estudio en una cadena JSON
-    const estudiosJson = JSON.stringify(estudios);
+    const fechaNacimiento = `${dia} de ${meses[mes - 1]} del año ${anio}`
 
-    // Guarda la cadena JSON en localStorage
-    localStorage.setItem('estudios', estudiosJson);
-}
-
-// Función para asignar el ID a cada estudio
-function asignarIdsAEstudios() {
-    estudios.forEach((estudio, index) => {
-        estudio.id = index + 1;
-    });
-}
-
-// Función para cargar los estudios desde el almacenamiento (localStorage)
-function cargarEstudiosDesdeAlmacenamiento() {
-    // Intenta obtener los datos de estudios desde localStorage
-    const estudiosJson = localStorage.getItem('estudios');
-
-    // Si se encuentran datos en el almacenamiento, convierte la cadena JSON a un array
-    if (estudiosJson) {
-        const estudiosCargados = JSON.parse(estudiosJson);
-
-        // Asigna un campo "id" a cada estudio
-        estudios = estudiosCargados;
-
-        // Llama a la función para asignar IDs
-        asignarIdsAEstudios();
-
-        // Muestra los estudios después de cargarlos y asignar los IDs
-        mostrarEstudios();
-
-        // Ocultar el mensaje de "Usted todavía no realizó ningún estudio"
-        document.getElementById("mensaje-no-estudios").style.display = "none";
-        document.getElementById("mensaje-no-estudios-ayuda").style.display = "none";
-
-        // Mostrar la sección de "Sus estudios realizados"
-        document.getElementById("contenedor-resultados").style.display = "block";
-    } else {
-        // No se encontraron estudios, ocultar la sección de "Sus estudios realizados"
-        document.getElementById("contenedor-resultados").style.display = "none";
-
-        // Mostrar el mensaje de "Usted todavía no realizó ningún estudio"
-        document.getElementById("mensaje-no-estudios").style.display = "block";
-        document.getElementById("mensaje-no-estudios-ayuda").style.display = "block";
+    const nuevoEstudio = {
+        nombre: nombre,
+        "fecha de nacimiento": fechaNacimiento,
+        simetría: resultado,
+        sexo: sexo
     }
+
+    Swal.fire({
+        icon: 'info',
+        title: 'Por favor, confirme el estudio que desea recuperar',
+        html: `
+            <div>
+                <p>Nombre: ${nombre}</p>
+                <p>Fecha de Nacimiento: ${fechaNacimiento}</p>
+                <p>Sexo: ${sexo}</p>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Recuperar estudio',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            estudios.push(nuevoEstudio)
+            asignarIdsAEstudios()
+            mostrarEstudios(estudios)
+            guardarEstudiosEnAlmacenamiento(estudios)
+
+            if (estudios.length === 1) {
+                document.getElementById("mensaje-no-estudios").style.display = "none"
+                document.getElementById("mensaje-no-estudios-ayuda").style.display = "none"
+            }
+
+            document.getElementById("contenedor-resultados").style.display = "block"
+        }
+    })
 }

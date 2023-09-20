@@ -7,45 +7,70 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Agregar Estudio</h1>
-    <label for="sexo">Sexo:</label>
-    <select id="sexo">
-        <option value="hombre">Hombre</option>
-        <option value="mujer">Mujer</option>
-        <option value="no-especificar">No especificar</option>
-    </select>
-    <br>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre">
-    <br>
-    <label for="dia">Día de nacimiento (dd):</label>
-    <select id="dia">
-    </select>
-    <br>
-    <label for="mes">Mes de nacimiento (mm):</label>
-    <select id="mes">
-    </select>
-    <br>    
-    <label for="anio">Año de nacimiento (aaaa):</label>
-    <input type="number" id="anio">
-    <br>
-    <button id="agregar">Realizar el estudio</button>
-
-    <h1>Sus estudios realizados</h1>
-    <div id="contenedor-resultados">
-        <div class="botones">
-            <h2>Ordenar estudios por:</h2>
-            <button id="filtro-id">ID</button>
-            <button id="filtro-nombre">Nombre</button>
-            <button id="filtro-fecha">Fecha de Nacimiento</button>
-            <button id="filtro-simetría">Simetría</button>
-            <button id="filtro-sexo">Sexo</button>
+    <h1>Obtenga su Simetría Personal</h1>
+    <header>
+        <div id="formulario">
+            <h3>Agregar nuevo estudio</h3>
+            <div class="label">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo">
+                    <option value="hombre">Hombre</option>
+                    <option value="mujer">Mujer</option>
+                    <option value="no-especificar">No especificar</option>
+                </select>
+            </div>
+            <br>
+            <div class="label">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre">
+            </div>
+            <br>
+            <div class="label">
+                <br>
+                <label for="dia">Día de nacimiento:</label>
+                <select id="dia">
+                </select>
+            </div>
+            <br>
+            <div class="label">
+                <label for="mes">Mes de nacimiento:</label>
+                <select id="mes">
+                </select>
+            </div>
+            <br>
+            <div class="label">
+                <label for="anio">Año de nacimiento:</label>
+                <input type="number" id="anio">
+            </div>
+            <br>
+            <div class="button-container">
+                <button id="agregar">Realizar el estudio</button>
+            </div>
         </div>
-        <br>
-        <div id="resultados" class="tarjeta-container"></div>
+        <img src="./img/Simetrias.png" alt="Simetrías de la Impregnología">
+    </header>
+    <div id="estudios-realizados">
+        <h2>Sus estudios realizados</h2>
+        <div id="contenedor-resultados">
+            <div class="botones">
+                <h4>Ordenar estudios por:</h4>
+                <button id="filtro-id">Número de Estudio</button>
+                <button id="filtro-nombre">Nombre</button>
+                <button id="filtro-fecha">Fecha de Nacimiento</button>
+                <button id="filtro-simetría">Simetría</button>
+                <button id="filtro-sexo">Sexo</button>
+            </div>
+            <br>
+            <div id="resultados" class="tarjeta-container"></div>
+        </div>
+        <h2 id="mensaje-no-estudios" style="display: none;">Usted todavía no realizó ningún estudio</h2>
+        <p id="mensaje-no-estudios-ayuda" style="display: none;">Complete los datos según le indica el sistema y presione "Realizar el Estudio" para comenzar</p>
     </div>
-    <h2 id="mensaje-no-estudios" style="display: none;">Usted todavía no realizó ningún estudio</h2>
-    <p id="mensaje-no-estudios-ayuda" style="display: none;">Complete los datos según le indica el sistema y presione "Realizar el Estudio" para comenzar</p>
+        <div id="contenedor-estudios-archivados">
+        <h5>Estudios archivados</h5>
+    <div id="estudios-archivados" class="tarjeta-container-archivados"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./js/main.js"></script>
 </body>
 </html>
